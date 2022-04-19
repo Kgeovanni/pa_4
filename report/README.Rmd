@@ -1,26 +1,23 @@
 ---
 title  : 'Programming assignment 4'
-output: github_document
+output: html_document
 
 ---
 
-**Author**: Your name here  
+**Author**: Diana Sanchez 
 **Date**: Last update: `r Sys.time()`
 
 
 # Overview
 
-<!-- 
-  Talk briefly about what you did here 
-  Describe your hypotheses
--->
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+My hypotheses below reflect what I learned this semester and previous knowledge from other courses. In addition, the reading assignments and class discussions have allowed me to make the following predictions.
+
+1. **The L2 Learners will demonstrate vowel production that is influenced by their English vowel inventory.** This means that the participant's vowel will differentiate from that of the bilingual speaker when attempting to produce the pseudo-Spanish words. For example, the L2 participant may produce the Spanish /e/ as /ei/. As a result, the spectrogram may demonstrate these differences. When considering a theoretical framework, such as Flege's Speech Learning Model, it is anticipated that the production between the Bilinguals and L2 Learners will differ due to the L2 Learners' activation of the English phonetic category (Amengual, 2012).
+
+2. **It is hypothesized that the bilingual speakers' vowel analyses will differentiate from one another due to the variety of English and Spanish influences each may have experienced.**
+
+3. **It is hypothesized that VOT for the bilingual participants will be shorter when compared to L2 Spanish Learners.** 
 
 
 # Prep
@@ -28,13 +25,19 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ## Libraries
 
 ```{r}
-#| label: load-libs
-#| echo: false 
-#| warning: false 
-#| message: false
-# Load libraries here
-
+library("plyr")
+library("dplyr")   
+library("ggplot2")
+library("readr")  
+library("here")    
+library("tidyr") 
+library("stringr")
+library("kableExtra")
+library("purrr")
+library("knitr")
 ```
+
+
 
 ## Load data
 
@@ -43,17 +46,161 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 # You need to get all the files in the 'data' directory and combine them
 # Check previous examples we did in class 
 
+bi01 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/bi01.csv")
+bi02 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/bi02.csv")
+bi03 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/bi03.csv")
+
+ne01 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/ne01.csv")
+ne02 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/ne02.csv")
+ne03 <- read.csv(file = "/Users/princesa/Desktop/pa_4/data/ne03.csv")
 ```
+
+
+## Raw Data Summaries
+
+```{r}
+bi01 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi01) %>%
+  kbl(caption = "Bilingual Data Summary bi01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+bi02 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi02) %>%
+  kbl(caption = "Bilingual Data Summary bi02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+bi03 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi03) %>%
+  kbl(caption = "Bilingual Data Summary bi03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne01 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot), 
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne01) %>%
+  kbl(caption = "L2 Learner Data Summary ne01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne02 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne02) %>%
+  kbl(caption = "L2 Learner Data Summary ne02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne03 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne03) %>%
+  kbl(caption = "L2 Learner Data Summary ne03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
 
 ## Tidy data
 
-```{r}
-#| label: tidy-data
-# Convert from long to wide or wide to long format as necessary (check 
-# examples from class)
-# Create any other relevant variables here 
-
+# Merging Bilingual and L2 Learner Data
+```{r, Bilingual}
+bilingual_data <- rbind(bi01, bi02, bi03)
 ```
+
+```{r L2 Learners}
+L2Learners_data <- rbind(ne01, ne02, ne03)
+```
+
+```{r Bilingual & L2 Learners}
+all_data <- bind_rows(bi01, bi02, bi03, ne01, ne02, ne03, .id = "file")
+all_data$file = as.numeric(all_data$file)
+all_data$notes = as.character(all_data$notes)
+```
+
+```{r sep. column}
+all_sep <- separate(all_data, col = fileID, sep = "_", into = c("ID", "word"))
+all_sep
+```
+
 
 # Analysis
 
@@ -63,31 +210,166 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 #| label: descriptive-stats
 # Give some descriptive summaries of your data 
 # Display your descriptives in a table (try knitr::kable())
-
 ```
+
+```{r}
+bi01 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi01) %>%
+  kbl(caption = "Bilingual Data Summary bi01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+bi02 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi02) %>%
+  kbl(caption = "Bilingual Data Summary bi02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+bi03 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+     SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "Bilingual Data Summary bi03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(bi03) %>%
+  kbl(caption = "Bilingual Data Summary bi03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne01 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot), 
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne01) %>%
+  kbl(caption = "L2 Learner Data Summary ne01") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne02 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne02) %>%
+  kbl(caption = "L2 Learner Data Summary ne02") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+ne03 %>%
+  summarize(
+    Meanf1 = mean(f1),
+    Meanf2 = mean(f2),
+    MeanVOT = mean(vot),
+    SD_f1 = sd(f1), 
+    SD_f2 = sd(f2), 
+    SD_VOT = sd(vot)) %>%
+ 
+  kbl(caption = "L2 Learner Data Summary ne03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r}
+summary(ne03) %>%
+  kbl(caption = "L2 Learner Data Summary ne03") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+
 
 ## Visualization
 
 ```{r}
-#| label: plots 
-#| fig.retina: 2
-# Include some plots here
+all_data %>%
+  ggplot(aes(y = f1, x = f2, color = file)) +
+  geom_point(position = position_jitter(2), size = 1.5) +
+  labs(x = "F2", y = "F1",
+       title = "Bilingual & L2 Learner: F1 and F2 Comparison") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
-<!-- 
-Also include a professional looking figure illustrating an example of the acoustics 
-of the production data, i.e., a plot generated in praat.
-You decide what is relevant (something related to your hypothesis). 
-Think about where this file should be located in your project. 
-What location makes most sense in terms of organization? 
-How will you access the file (path) from this .Rmd file?
-If you need help consider the following sources: 
-  - Search 'Rmarkdown image' on google, stackoverflow, etc.
-  - Search the 'knitr' package help files in RStudio
-  - Search the internet for HTML code (not recommended, but it works)
-  - Check the code from my class presentations (may or may not be helpful)
--->
+```{r}
+all_data %>%
+  ggplot(aes(x = f1, y = f2)) +
+  geom_boxplot() +
+  facet_wrap(vars(file)) +
+  labs(x = "F1", y = "F2", title = "Bilingual and L2 Learners f1 and f2")
+```
+
+
+# Praat Spectogram
+Figure 1. The Bilingual participant (bi01) below is producing "kaka."
+```{r}
+url <- "https://drive.google.com/uc?export=view&id=1qJsR6By3yJ61UQ-E2NjVW8CvfCYxnyLg"
+knitr::include_graphics(url, dpi = 600)
+```
+
+
+
+Figure 2. The L2 Learner participant (ne) below is producing "kaka."
+```{r}
+url <- "https://drive.google.com/uc?export=view&id=1AX9DSa1u2ZKd8GZ_smxyjlBV-CPprxjv"
+knitr::include_graphics(url, dpi = 600)
+```
+
 
 ## Hypothesis test
 
@@ -95,25 +377,14 @@ If you need help consider the following sources:
 #| label: stats
 # Conduct a simple statistical analysis here (optional)
 
+model <- lm(f1~f2, data=all_data)
 ```
 
 
 # Conclusion
 
-<!-- 
-Revisit your hypotheses (refer to plots, figures, tables, statistical tests, 
-etc.)
+It is almost the end of the semester! As I reflect on my growths and glows, I have to admit that I am proud of my accomplishments. I am "more" comfortable with Rstudio and statistics but need to continue to improve in this area. I never used Praat, and it is an interesting tool with many benefits. 
 
-Reflect on the entire process. 
-What did you enjoy? What did you hate? What did you learn? 
-What would you do differently?
--->
+I know with time and practice, this will improve, but one of the things that I dislike is that it can take me hours to find a code that works or one that I properly apply. For example, I found that the Knitr::include_graphics or similar ones did not work for me. I resorted to adding the image (Praat) as a link to view it in my pa_4 report.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-</br></br>
+I had some difficulty looking for the error in the scripts from the pa-4. I was able to resolve all, but the one with the "#" error took long. The next group of students would benefit from knowing the number of errors in each script so they are not overanalyzing (and taking long) each script (like me). For example, I would suggest letting students know that there are 2 errors in scipt_1 and 1 error in script_2 would be helpful. 
